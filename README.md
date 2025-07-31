@@ -9,10 +9,10 @@
 ## 我怎么运行
 用客户端或网页版打开.bcm4文件
 ## 加载自制文件
-用git clone https://github.com/yuandev-pixel/open3D-ALPHA.git
-下载[python3](https://www.python.org)
-获得.obj 3D模型
-将python文件加载的文件改成文件的路径
-在终端里用cd和ls命令找到converter.py
-用python converter.py或pyhton3 converter.py运行converter.py
-将运行后产生的文件复制到bcm4列表里
+1. 用git clone https://github.com/yuandev-pixel/open3D-ALPHA.git
+2. 下载[python3](https://www.python.org)
+3. 获得.obj 3D模型
+4. 将python文件加载的文件改成文件的路径
+5. 在终端里用cd和ls命令找到converter.py
+6. 用python converter.py或pyhton3 converter.py运行converter.py
+7. 将运行后产生的文件复制到bcm4列表里
