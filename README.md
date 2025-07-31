@@ -1,4 +1,4 @@
-# open3D-BETA
+# open3D-ALPHA
 
 ## 介绍
 用源码编辑器4做的3D引擎,可以让任何人做3D
@@ -9,8 +9,10 @@
 ## 我怎么运行
 用客户端或网页版打开.bcm4文件
 ## 加载自制文件
+用git clone https://github.com/yuandev-pixel/open3D-ALPHA.git
 下载[python3](https://www.python.org)
 获得.obj 3D模型
 将python文件加载的文件改成文件的路径
-运行converter.py
+在终端里用cd和ls命令找到converter.py
+用python converter.py或pyhton3 converter.py运行converter.py
 将运行后产生的文件复制到bcm4列表里
