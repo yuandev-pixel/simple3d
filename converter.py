@@ -1,5 +1,5 @@
 L=[]
-with open("cube.obj","r") as file:
+with open("dragon.obj","r") as file:
 	lines = file.readlines()
 	vf=True
 	ff=True
@@ -49,3 +49,4 @@ with open("cube.obj","r") as file:
 print(L)
 with open("stupid.mystupidfile","w") as file:
 	file.writelines(L)
+
