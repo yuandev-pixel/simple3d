@@ -27,22 +27,12 @@ with open("cube.obj","r") as file:
 			tt=[]
 			# print(temp)
 			# print(len(temp))
-			if len(temp)>4:
-				targ="f "
-				targ+=str(temp[1].strip())+" "
-				for i in range(3,len(temp)-1):
-					targ+=str(temp[i].strip())+" "
-				targ+=str(temp[len(temp)-1].strip())
-				targ+="\n"
-				# print(targ)
-			# 	# print(targ)
-				lines.insert(rc+1,targ)
-				rc+=1
+			
 
 			print(lines)
 			cnt=0
 			for vert in temp:
-				if cnt>0 and cnt<4:
+				if cnt>0:
 					tt.append(vert.split("/")[0])
 				cnt+=1
 			L.append("f")
