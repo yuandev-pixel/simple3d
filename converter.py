@@ -1,7 +1,9 @@
 L=[]
-with open("dragon.obj","r") as file:
+
+with open("monkey.obj","r") as file:
 	lines = file.readlines()
 	vf=True
+	vnf=True
 	ff=True
 	count=0
 	rc=0
@@ -15,6 +17,14 @@ with open("dragon.obj","r") as file:
 			temp[3]=temp[3].strip()
 			L.append("v "+str(float(temp[1])*100)+" "+str(float(temp[2])*100)+" "+str(float(temp[3])*100+300)+" 0 0 0\n")
 			count+=1
+		if line[0:3]=="vn ":
+			if vnf:
+				L.append("---normalstart---\n")
+				count+=1
+				vnf=False
+			L.append(line)
+			count+=1
+
 		if line[0:2]=="f ":
 			if ff:
 				L.append("---facestart---\n")
@@ -22,18 +32,17 @@ with open("dragon.obj","r") as file:
 				ff=False
 			temp=line.split(" ")
 			# print(temp)
-			print(line)
+			# print(line)
 
 			tt=[]
 			# print(temp)
 			# print(len(temp))
 			
-
-			print(lines)
+			# print(lines)
 			cnt=0
 			for vert in temp:
 				if cnt>0:
-					tt.append(vert.split("/")[0])
+					tt.append(vert.strip())
 				cnt+=1
 			L.append("f")
 			# print(count)
@@ -46,7 +55,7 @@ with open("dragon.obj","r") as file:
 			count+=1
 		rc+=1
 	L.append("---textstart---")
-print(L)
+# print(L)
 with open("stupid.mystupidfile","w") as file:
 	file.writelines(L)
 
