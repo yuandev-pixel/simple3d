@@ -1,13 +1,23 @@
+import math
 L=[]
-
-with open("monkey.obj","r") as file:
+filename="funny"
+with open(filename+".obj","r") as file:
 	lines = file.readlines()
 	vf=True
 	vnf=True
 	ff=True
 	count=0
 	rc=0
+	of=True
 	for line in lines:
+		if line[0:2]=="o ":
+			if not of:
+				L.append("---objend---\n")
+			L.append("---obj---\n")
+			of=False
+			vf=True
+			vnf=True
+			ff=True
 		if line[0:2]=="v ":
 			if vf:
 				L.append("---vertstart---\n")
@@ -15,7 +25,7 @@ with open("monkey.obj","r") as file:
 				vf=False
 			temp=line.split(" ")
 			temp[3]=temp[3].strip()
-			L.append("v "+str(float(temp[1])*100)+" "+str(float(temp[2])*100)+" "+str(float(temp[3])*100+300)+" 0 0 0\n")
+			L.append("v "+str(float(temp[1])*100)+" "+str(float(temp[2])*100)+" "+str(0-float(temp[3])*100+300)+"\n")
 			count+=1
 		if line[0:3]=="vn ":
 			if vnf:
@@ -30,32 +40,9 @@ with open("monkey.obj","r") as file:
 				L.append("---facestart---\n")
 				count+=1
 				ff=False
-			temp=line.split(" ")
-			# print(temp)
-			# print(line)
-
-			tt=[]
-			# print(temp)
-			# print(len(temp))
-			
-			# print(lines)
-			cnt=0
-			for vert in temp:
-				if cnt>0:
-					tt.append(vert.strip())
-				cnt+=1
-			L.append("f")
-			# print(count)
-			for item in tt:
-				L[count]=L[count]+" "+str(item)
-			L[count]=L[count]+"\n"
-			# count+=1
-			# if len(temp)>4:
-				# count+=1
-			count+=1
+			L.append(line)
 		rc+=1
-	L.append("---textstart---")
 # print(L)
-with open("stupid.mystupidfile","w") as file:
+L.append("---objend---\n---end---")
+with open(filename+".td","w") as file:
 	file.writelines(L)
-
