@@ -1,6 +1,6 @@
 import math
 L=[]
-filename="funny"
+filename="funny2"
 with open(filename+".obj","r") as file:
 	lines = file.readlines()
 	vf=True

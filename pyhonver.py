@@ -12,7 +12,9 @@ for i in range(len(obj)-1):
     obj[i]=obj[i][:-1]
 i=0
 while obj[i]!="---end---":
+    print(i,len(obj))
     while obj[i]!="---vertstart---":
+        print(i,len(obj))
         i+=1
     i+=1
     while obj[i]!="---normalstart---":
@@ -65,7 +67,7 @@ def ry(x,y,z):
     prosses5tmp[3]= (scry*x)+(ccry*z)
 
 def appendavg():
-    avgs.append(f"{j}|{xavg}|{yavg}|{zavg}")
+    avgs.append(f"{l}|{xavg}|{yavg}|{zavg}")
     
 def quicksort_n(left,right,n):
     if(left>right):
@@ -92,7 +94,7 @@ def p(x,y,z):
     return (600*(x/(max(1,z)*tangent))+SCREEN_W/2,-600*(y/(max(1,z)*tangent))+SCREEN_H/2)
 
 def render():
-    global scrx,ccrx,scry,ccry,prosses5tmp,avgs,j,xavg,yavg,zavg
+    global scrx,ccrx,scry,ccry,prosses5tmp,avgs,j,xavg,yavg,zavg,l
     prossesing5ed=[]
     scry=math.sin(math.radians(cry))
     ccry=math.cos(math.radians(cry))
@@ -113,6 +115,7 @@ def render():
     tmp=[]
     tmptmp=[]
     j=0
+    l=0
     toberender=[]
     for ttmp in face:
         tmp=ttmp.split(' ')
@@ -124,44 +127,66 @@ def render():
         vip=[]
         sz=[]
         for k in range(1,len(tmp)):
-            tmptmp=prossesing5ed[int(tmp[k].split('/')[0])-2].split(' ')
+            tmptmp=prossesing5ed[int(tmp[k].split('/')[0])-1].split(' ')
             # print(int(tmp[k].split('/')[0])-1)
             xavg+=float(tmptmp[1])
             yavg+=float(tmptmp[2])
             zavg+=float(tmptmp[3])
-            if float(tmptmp[3])<=0:
+            if float(tmptmp[3])<0:
                 addavg-=1
-                sz.append((False,float(tmptmp[1]),float(tmptmp[2]),float(tmptmp[3])))
+                sz.append((False,float(tmptmp[1]),float(tmptmp[2]),float(tmptmp[3]),int(tmp[k].split('/')[0])))
             else:
-                sz.append((True,float(tmptmp[1]),float(tmptmp[2]),float(tmptmp[3])))
+                sz.append((True,float(tmptmp[1]),float(tmptmp[2]),float(tmptmp[3]),int(tmp[k].split('/')[0])))
         xavg/=k-2
         yavg/=k-2
         zavg/=k-2
         if addavg==len(tmp)-1:
             appendavg()
+          #  print(ttmp)
             toberender.append(ttmp)
+            l+=1
         elif addavg>0:
+            appendavg()
+            l+=1
             size=len(sz)
-            for i in range(size):
+            i = 0
+            while i < size:
+          #  for i in range(size):
                 if (sz[(i-1)%size][0] or sz[(i+1)%size][0]) and (not sz[i][0]):
-                    if sz[(i-1)%size]:
-                        vip.append(((i-1)%size,i))
-                    if sz[(i+1)%size]:
-                        vip.append((i,(i+1)%size))
-            for points in vip:
-                sxz=(sz[points[0]][3]-sz[points[1]][3])/(sz[points[0]][1]-sz[points[1]][1]+sdfscf)
-                kxz=sz[points[1]][3]-sz[points[1]][1]*sxz
-                syz=(sz[points[0]][3]-sz[points[1]][3])/(sz[points[0]][2]-sz[points[1]][2]+sdfscf)
-                kyz=sz[points[1]][3]-syz*sz[points[1]][2]
-                prossesing5ed.append(f"p {-kxz/(sxz+sdfscf)} {-kyz/(syz+sdfscf)} 0")
+                    left_add = False
+                    right_add = False
+                    if sz[(i-1)%size][0]:
+                        point = sz[(i-1)%size] 
+                        x0 = sz[i][1]+ (point[1]-sz[i][1])*(0-sz[i][3])/(point[3]-sz[i][3])
+                        y0 = sz[i][2]+ (point[2]-sz[i][2])*(0-sz[i][3])/(point[3]-sz[i][3])
+                        left_add = True
+                    if sz[(i+1)%size][0]:
+                        point = sz[(i+1)%size]    
+                        x1 = sz[i][1]+ (point[1]-sz[i][1])*(0-sz[i][3])/(point[3]-sz[i][3])
+                        y1 = sz[i][2]+ (point[2]-sz[i][2])*(0-sz[i][3])/(point[3]-sz[i][3])
+                        right_add = True
+                    if left_add:
+                        prossesing5ed.append(f"p {x0} {y0} 0")
+                        left_id=len(prossesing5ed)
+                    if right_add:
+                        prossesing5ed.append(f"p {x1} {y1} 0")
+                        right_id=len(prossesing5ed)
+                    if left_add:
+                        sz[i] = (True, x0, y0, 0, left_id)
+                        
+                        if right_add:
+                            sz.insert(i+1,(True,x1,y1,0,right_id))
+                            size += 1
+                    else:
+                        sz[i] = (True, x1, y1, 0, right_id)
+                        
+                i+=1    
+            print(size)        
+               
             s="f"
-            vips=0
-            for i,point in enumerate(sz):
-                if point[0]:
-                    s+=f" {int(tmp[k].split('/')[0])}"
-                elif sz[(i-1)%size][0] or sz[(i+1)%size][0]:
-                    s+=f" {len(prossesing5ed)-vips}"
-                    vips-=1
+            for point in sz:
+                s+=f" {point[4]}"
+          #  print(s)
             toberender.append(s)
             
         j+=1
@@ -182,13 +207,15 @@ def render():
             s=e
         e+=1
     j=0
+    print(len(toberender))
     for avg in avgs:
+        print(len(toberender),int(avg.split('|')[0]))
         tmp=toberender[int(avg.split('|')[0])].split(' ')
         draw=[]
         for k in range(1,len(tmp)):
             tmptmp=prossesing5ed[int(tmp[k].split('/')[0])-1].split(' ')
             draw.append(p(float(tmptmp[1]),float(tmptmp[2]),float(tmptmp[3])))
-        pygame.draw.polygon(screen,color[j%6],draw)
+        pygame.draw.polygon(screen,color[j%6],draw,width=0)
        # print(draw)
         j+=1
 
@@ -214,7 +241,7 @@ while running:
         pcz=cz
         pcrx=crx
         pcry=cry
-        print(cx,cy,cz,crx,cry)
+       # print(cx,cy,cz,crx,cry)
     pygame.display.flip()
     
     clock.tick(60)
